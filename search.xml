@@ -48,6 +48,105 @@
       </tags>
   </entry>
   <entry>
+    <title>RabbitMq入门教程</title>
+    <url>/blog/2020/12/29/RabbitMq/</url>
+    <content><![CDATA[<h2 id="官网简介"><a href="#官网简介" class="headerlink" title="官网简介"></a>官网简介</h2><pre><code>RabbitMQ是部署最广泛的开源消息代理
+RabbitMQ轻量级，易于在内部和云中部署。
+它支持多种消息传递协议。
+RabbitMQ可以部署在分布式和联合配置中，以满足高规模，高可用性要求</code></pre>
+<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><pre><code>1.异步消息：
+    支持多种消息传递协议，消息队列，传递确认，灵活路由到队列，多种交换类型。
+2.语言支持：
+    与BOSH，Chef，Docker和Puppet一起部署。使用喜欢的编程语言开发跨语言消息，例如：Java，.NET，PHP，Python，JavaScript，Ruby，Go 等等。
+3.分布式部署：
+    部署为集群以实现高可用性和吞吐量; 联合多个可用区和区域。
+4.工具和插件：
+    支持持续集成，运营指标和与其他企业系统集成的 各种工具和插件。灵活的插件方法，用于扩展RabbitMQ功能。
+5.管理与监督：
+    用于管理和监控 RabbitMQ的HTTP-API，命令行工具和UI 。
+6.企业&amp;云: 
+    可插拔身份验证，授权，支持TLS和LDAP。轻量级，易于部署在公共云和私有云中。</code></pre>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><pre><code>1.安装erlang yum库 ---&gt;2.安装erlang ---&gt;3.安装rabbitMQ yum库 ---&gt; 4.安装rabbitMQ
+
+（推荐使用https://packagecloud.io/简单便捷,使用提供的bash指令即可）
+依赖于erlang语言，所以需要先安装erlang环境
+安装erlang yum库： 
+    curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | sudo bash
+    若出现 
+    error: cannot open Packages database in /var/lib/rpm 
+    是因为rpm db 出现了问题这是需要进行rpm db的重建，如下操作：
+
+    cd /var/lib/rpm     
+     # rpmdb所在目录
+
+    ls | grep ‘db.‘     
+    # 列出相关rpmdb文件
+
+    for i in $(ls | grep ‘db.‘);do mv $i $i.bak;done   
+    # 将原rpmdb文件都更名为结尾带.bak的文件
+    或者  
+    rm -f __db.*     
+    # 清除原rpmdb文件
+
+    rpm --rebuilddb    
+     # 重建rpm数据库
+
+    yum clean all     
+    # 清除所有yum的缓存
+
+再重新执行安装命令,成功如下图：</code></pre>
+<p><img src="http://106.12.192.199/install_erlang_yum.png" alt="install erlang yum"></p>
+<pre><code>安装erlang： yum install erlang 成功如下图</code></pre>
+<p><img src="http://106.12.192.199/install_erlang.png" alt="install erlang"></p>
+<pre><code>安装rabbitMQ  yum库：
+curl -s [https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh](https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh) | sudo bash
+安装成功如图:</code></pre>
+<p><img src="http://106.12.192.199/install_rabbitmq_yum.png" alt="install rabbitmq yum"></p>
+<pre><code> 导入签名：
+
+rpm --import https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey
+
+rpm --import https://packagecloud.io/gpg.key
+
+实现向前兼容
+
+安装rabbitMQ： yum install rabbitmq-server</code></pre>
+<p><img src="http://106.12.192.199/install_rabbitmq.png" alt="install rabbitmq"></p>
+<pre><code>安装到此完成</code></pre>
+<h2 id="服务相关基础指令"><a href="#服务相关基础指令" class="headerlink" title="服务相关基础指令"></a>服务相关基础指令</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">启动：  </span><br><span class="line">&#x2F;bin&#x2F;systemctl start rabbitmq-server.service</span><br><span class="line"></span><br><span class="line">关闭：</span><br><span class="line">&#x2F;bin&#x2F;systemctl stop rabbitmq-server.service</span><br><span class="line"></span><br><span class="line">查看插件状态：</span><br><span class="line">rabbitmqctl status| grep listeners</span><br><span class="line"></span><br><span class="line">查看状态结果：</span><br><span class="line">&#123;listeners,[&#123;clustering,25672,&quot;::&quot;&#125;,&#123;amqp,5672,&quot;::&quot;&#125;,&#123;http,15672,&quot;::&quot;&#125;]&#125;</span><br><span class="line"></span><br><span class="line">启动管理UI：</span><br><span class="line">rabbitmq-plugins enable rabbitmq_management    访问端口 ：15672</span><br><span class="line"></span><br><span class="line">创建用户：</span><br><span class="line">rabbitmqctl add_user admin admin</span><br><span class="line"></span><br><span class="line">赋权：</span><br><span class="line">rabbitmqctl set_user_tags admin administrator （webUI）</span><br><span class="line">rabbitmqctl set_permissions -p &#x2F; admin &quot;.*&quot; &quot;.*&quot; &quot;.*&quot; （赋权连接）</span><br><span class="line"></span><br><span class="line">开机启动： chkconfig rabbitmq-server on</span><br><span class="line"></span><br><span class="line">rabbitmq启动后需要将rabbitmq_management插件启用，这样才可以在浏览器中访问rabbimq的图形化监控中心</span><br><span class="line">图形化监控中心地址：http:&#x2F;&#x2F;$&#123;ip&#125;:15672&#x2F; 默认使用 guest&#x2F;guest 登录</span><br></pre></td></tr></table></figure>
+<h3 id="rabbirmq-登录页面"><a href="#rabbirmq-登录页面" class="headerlink" title="rabbirmq 登录页面"></a>rabbirmq 登录页面</h3><p><img src="http://106.12.192.199/rabbitmq_login.png" alt="rabbitmq_login"></p>
+<h3 id="rabbitmq-管理页面"><a href="#rabbitmq-管理页面" class="headerlink" title="rabbitmq 管理页面"></a>rabbitmq 管理页面</h3><p><img src="http://106.12.192.199/rabbitmq_admin.png" alt="rabbitmq_admin"></p>
+<h2 id="生产-server-消费"><a href="#生产-server-消费" class="headerlink" title="生产-server-消费"></a>生产-server-消费</h2><p><img src="http://106.12.192.199/rabbitmq_framework.png" alt="rabbitmq_framework"></p>
+<h3 id="主要组成部分"><a href="#主要组成部分" class="headerlink" title="主要组成部分"></a>主要组成部分</h3><pre><code>virtualPort：
+每个virtual host本质上都是一个RabbitMQ Server，拥有它自己的queue，exchange，和bind rule等等。这保证了你可以在多个不同的application中使用RabbitMQ。
+
+channel：
+与RabbitMQ打交道的最重要的一个接口，我们大部分的业务操作是在Channel这个接口中完成的，包括定义Queue、定义Exchange、绑定Queue与Exchange、发布消息等。
+
+exchange： 
+Exchange是属于Vhost的。同一个Vhost不能有重复的Exchange名称。 消息生产者发送消息时并不是直接发送到queue，而是发送到exchange，exchange再通过相关匹配设置将消息投放到对应的queue中供消费者消费。
+
+queue：
+消费者通过queue来获取消息进行消费</code></pre>
+<h4 id="exchange的类型"><a href="#exchange的类型" class="headerlink" title="exchange的类型"></a>exchange的类型</h4><pre><code>1.Direct Exchange – 处理路由键。需要将一个队列绑定到交换机上，要求该消息与一个特定的路由键完全匹配。这是一个完整的匹配。如果一个队列绑定到该交换机上要求路由键 “dog”，则只有被标记为“dog”的消息才被转发，不会转发dog.puppy，也不会转发dog.guard，只会转发dog。(一对一的匹配才会转发)</code></pre>
+<p><img src="http://106.12.192.199/direct.png" alt="direct"></p>
+<pre><code>2. Fanout Exchange – 不处理路由键。你只需要简单的将队列绑定到交换机上。一个发送到交换机的消息都会被转发到与该交换机绑定的所有队列上。很像子网广播，每台子网内的主机都获得了一份复制的消息。Fanout交换机转发消息是最快的（也号称广播转发消息，会转发到所有绑定此交换机的队列上）</code></pre>
+<p><img src="http://106.12.192.199/fanout.png" alt="fanout"></p>
+<pre><code>3.Topic Exchange – 将路由键和某模式进行匹配。此时队列需要绑定要一个模式上。符号“#”匹配一个或多个词，符号“*”匹配不多不少一个词。因此“audit.#”能够匹配到“audit.irs.corporate”，但是“audit.*” 只会匹配到“audit.irs”。（匹配才会转发）</code></pre>
+<p><img src="http://106.12.192.199/topic.png" alt="topic"></p>
+<h2 id="JAVA代码实现"><a href="#JAVA代码实现" class="headerlink" title="JAVA代码实现"></a>JAVA代码实现</h2><h3 id="pom-xml"><a href="#pom-xml" class="headerlink" title="pom.xml"></a>pom.xml</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;com.rabbitmq&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;amqp-client&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;5.1.2&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="公共代码"><a href="#公共代码" class="headerlink" title="公共代码"></a>公共代码</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;配置信息</span><br><span class="line">public static final String RABBIT_HOST&#x3D;&quot;106.12.192.199&quot;;</span><br><span class="line">public static final String RABBIT_USERNAME&#x3D;&quot;admin&quot;;</span><br><span class="line">public static final String RABBIT_PASSWORD&#x3D;&quot;admin&quot;;</span><br><span class="line">public static final String RABBIT_VIRTUAL_HOST&#x3D;&quot;&#x2F;&quot;;</span><br><span class="line">public static final Integer RABBIT_PORT&#x3D; 5672;</span><br><span class="line">public static final String  RABBIT_QUEUE_NAME&#x3D;&quot;test&quot;;</span><br><span class="line">public static final String  RABBIT_EXCHANGE_NAME&#x3D;&quot;test-exchange&quot;;</span><br><span class="line">public static final String  RABBIT_ROUTE_KEY&#x3D;&quot;test-route&quot;;</span><br><span class="line">public static final String  RABBIT_CONSUMER_TAG&#x3D;&quot;test-customer&quot;;</span><br><span class="line"></span><br><span class="line"> &#x2F;&#x2F;获取链接</span><br><span class="line">public Connection getConnection() throws IOException, TimeoutException &#123;</span><br><span class="line">    &#x2F;&#x2F;获取连接</span><br><span class="line">    ConnectionFactory connectionFactory &#x3D; new ConnectionFactory();</span><br><span class="line">    connectionFactory.setUsername(RABBIT_USERNAME);</span><br><span class="line">    connectionFactory.setPassword(RABBIT_PASSWORD);</span><br><span class="line">    connectionFactory.setVirtualHost(RABBIT_VIRTUAL_HOST);</span><br><span class="line">    connectionFactory.setHost(RABBIT_HOST);</span><br><span class="line">    connectionFactory.setPort(RABBIT_PORT);</span><br><span class="line">    return connectionFactory.newConnection();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;生产者</span><br><span class="line">@Test</span><br><span class="line">public  void test1() throws IOException, TimeoutException &#123;</span><br><span class="line">    Connection connection &#x3D; getConnection();</span><br><span class="line">    Channel channel &#x3D; null;</span><br><span class="line">    try&#123;</span><br><span class="line">        &#x2F;&#x2F;创建一个通道</span><br><span class="line">        channel &#x3D; connection.createChannel();</span><br><span class="line">        channel.exchangeDeclare(RABBIT_EXCHANGE_NAME,BuiltinExchangeType.TOPIC);</span><br><span class="line">        &#x2F;&#x2F;声明一个队列</span><br><span class="line">        channel.queueDeclare(RABBIT_QUEUE_NAME + 1, false,false,false,null);</span><br><span class="line">        &#x2F;&#x2F;声明一个队列</span><br><span class="line">        channel.queueDeclare(RABBIT_QUEUE_NAME + 2, false,false,false,null);</span><br><span class="line">        &#x2F;&#x2F;绑定交换机和队列</span><br><span class="line">        channel.queueBind(RABBIT_QUEUE_NAME+ 1,RABBIT_EXCHANGE_NAME,RABBIT_ROUTE_KEY);</span><br><span class="line">        channel.queueBind(RABBIT_QUEUE_NAME+ 2,RABBIT_EXCHANGE_NAME,RABBIT_ROUTE_KEY);</span><br><span class="line">        &#x2F;&#x2F;发送消息</span><br><span class="line">        String content &#x3D; &quot;RABBITMQ-TEST&quot;;</span><br><span class="line">        channel.basicPublish(RABBIT_EXCHANGE_NAME,RABBIT_ROUTE_KEY,null, content.getBytes());</span><br><span class="line">        System.out.println(&quot;发送完成&quot;);</span><br><span class="line">    &#125;catch(Exception e)&#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;finally &#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            channel.close();</span><br><span class="line">            connection.close();</span><br><span class="line">        &#125;catch (Exception e)&#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;消费者</span><br><span class="line">@Test</span><br><span class="line">public void test2() throws IOException, TimeoutException &#123;</span><br><span class="line">    Connection connection &#x3D; getConnection();</span><br><span class="line">    Channel channel &#x3D; null;</span><br><span class="line">    try&#123;</span><br><span class="line">        channel &#x3D; connection.createChannel();</span><br><span class="line">        channel.exchangeDeclare(RABBIT_EXCHANGE_NAME,BuiltinExchangeType.TOPIC);</span><br><span class="line">        &#x2F;&#x2F;声明一个队列</span><br><span class="line">        channel.queueDeclare(RABBIT_QUEUE_NAME + 1, false,false,false,null);</span><br><span class="line">        &#x2F;&#x2F;绑定交换机和队列</span><br><span class="line">        channel.queueBind(RABBIT_QUEUE_NAME + 1,RABBIT_EXCHANGE_NAME,RABBIT_ROUTE_KEY);</span><br><span class="line">        boolean autoAck &#x3D; true ;</span><br><span class="line"></span><br><span class="line">        channel.basicConsume(RABBIT_QUEUE_NAME + 1, autoAck,RABBIT_CONSUMER_TAG ,new DefaultConsumer(channel) &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void handleConsumeOk(String consumerTag) &#123;</span><br><span class="line">                System.out.println(&quot;handleConsumeOk:consumerTag---&gt;&quot; + consumerTag);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void handleCancelOk(String consumerTag) &#123;</span><br><span class="line">                System.out.println(&quot;handleCancelOk:consumerTag---&gt;&quot; + consumerTag);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void handleCancel(String consumerTag) throws IOException &#123;</span><br><span class="line">                System.out.println(&quot;handleCancel:consumerTag---&gt;&quot; + consumerTag);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void handleShutdownSignal(String consumerTag, ShutdownSignalException sig) &#123;</span><br><span class="line">                System.out.println(&quot;handleShutdownSignal:consumerTag---&gt;&quot; + consumerTag);</span><br><span class="line">                System.out.println(&quot;handleShutdownSignal:sig---&gt;&quot; + sig);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void handleRecoverOk(String consumerTag) &#123;</span><br><span class="line">                System.out.println(&quot;handleRecoverOk:consumerTag---&gt;&quot; + consumerTag);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException &#123;</span><br><span class="line">                System.out.println(&quot;handleDelivery:consumerTag---&gt;&quot; + consumerTag);</span><br><span class="line">                System.out.println(&quot;handleDelivery:envelope---&gt;&quot; + envelope);</span><br><span class="line">                System.out.println(&quot;handleDelivery:properties---&gt;&quot; + properties);</span><br><span class="line">                System.out.println(&quot;handleDelivery:body---&gt;&quot; + new String(body));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        while(true)&#123;&#125;</span><br><span class="line">    &#125;catch(Exception e)&#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;finally &#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            channel.close();</span><br><span class="line">            connection.close();</span><br><span class="line">        &#125;catch (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"> &#x2F;&#x2F;删除交换机以及队列</span><br><span class="line">@Test</span><br><span class="line">public void test3() throws IOException, TimeoutException &#123;</span><br><span class="line">    Connection connection &#x3D; getConnection();</span><br><span class="line">    Channel channel &#x3D; connection.createChannel();</span><br><span class="line">    channel.queueDelete(RABBIT_QUEUE_NAME);</span><br><span class="line">    channel.exchangeDelete(RABBIT_EXCHANGE_NAME);</span><br><span class="line">&#125;</span><br><span class="line">   </span><br></pre></td></tr></table></figure>
+<h2 id="RabbitMQ中的消息不可达returnlistener的使用"><a href="#RabbitMQ中的消息不可达returnlistener的使用" class="headerlink" title="RabbitMQ中的消息不可达returnlistener的使用"></a>RabbitMQ中的消息不可达returnlistener的使用</h2><pre><code>模拟的时候,需要先将消费者启动，channel.basicPublish第三个参数mandatory必须为true，不然会直接删除消息而不会返回。</code></pre>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;生产者</span><br><span class="line">@Test</span><br><span class="line">public  void test1() throws IOException, TimeoutException &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    Connection connection &#x3D; getConnection();</span><br><span class="line">    Channel channel &#x3D; null;</span><br><span class="line">    try&#123;</span><br><span class="line">        &#x2F;&#x2F;创建一个通道</span><br><span class="line">        channel &#x3D; connection.createChannel();</span><br><span class="line">        &#x2F;&#x2F;发送消息</span><br><span class="line">        String content &#x3D; &quot;RABBITMQ-TEST&quot;;</span><br><span class="line">        channel.addReturnListener((replyCode, replyText, exchange, routingKey, properties, body) -&gt; System.out.println(new String(body)));</span><br><span class="line">        channel.basicPublish(RABBIT_EXCHANGE_NAME,&quot;abc.save&quot;,true,null, content.getBytes());</span><br><span class="line">    &#125;catch(Exception e)&#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;finally &#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            channel.close();</span><br><span class="line">            connection.close();</span><br><span class="line">        &#125;catch (Exception e)&#123;</span><br><span class="line">         e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="RabbitMQ中的消息确认消息Confirm的使用"><a href="#RabbitMQ中的消息确认消息Confirm的使用" class="headerlink" title="RabbitMQ中的消息确认消息Confirm的使用"></a>RabbitMQ中的消息确认消息Confirm的使用</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;生产者</span><br><span class="line">@Test</span><br><span class="line">public  void test1() throws IOException, TimeoutException &#123;</span><br><span class="line">    Connection connection &#x3D; getConnection();</span><br><span class="line">    Channel channel &#x3D; null;</span><br><span class="line">    try&#123;</span><br><span class="line">        &#x2F;&#x2F;创建一个通道</span><br><span class="line">        channel &#x3D; connection.createChannel();</span><br><span class="line">        &#x2F;&#x2F;指定我们的消息投递模式: 消息的确认模式</span><br><span class="line">        channel.confirmSelect();</span><br><span class="line">        &#x2F;&#x2F;发送消息</span><br><span class="line">        String content &#x3D; &quot;RABBITMQ-TEST&quot;;</span><br><span class="line">        channel.basicPublish(RABBIT_EXCHANGE_NAME,&quot;abc.save&quot;,true,null, content.getBytes());</span><br><span class="line">        &#x2F;&#x2F;添加一个确认监听</span><br><span class="line">        channel.addConfirmListener(new ConfirmListener() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void handleAck(long deliveryTag, boolean multiple) throws IOException &#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void handleNack(long deliveryTag, boolean multiple) throws IOException &#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;catch(Exception e)&#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;finally &#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            channel.close();</span><br><span class="line">            connection.close();</span><br><span class="line">        &#125;catch (Exception e)&#123;</span><br><span class="line">         e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>RabbitMq</category>
+      </categories>
+      <tags>
+        <tag>消息队列</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Redis底层实现数据结构</title>
     <url>/blog/2020/12/29/Redis%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</url>
     <content><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>本篇文章主要介绍Redis底层实现的数据结构。</p>
@@ -217,295 +316,6 @@
 <li>负责保存节点的值， 节点值可以是一个字节数组或者整数， 值的类型和长度由节点的 <code>encoding</code> 属性决定</li>
 </ul>
 <h3 id="特性-2"><a href="#特性-2" class="headerlink" title="特性"></a>特性</h3><ul>
-<li>可能会出现连锁更新<ul>
-<li>每个节点都处于250-253的临界值，新增节点大于等于254时，全部节点的previous_entry_length都会变成5个字节，导致全部节点都会超过254字节</li>
-<li>删除节点也可能会引发连锁更新</li>
-</ul>
-</li>
-<li>压缩列表怎么节约内存的：这是相较于数组列表来说比较节约空间，因为数组列表中每个元素的空间都是一致的，而压缩列表的每个元素的大小都是根据自身大小而分配的</li>
-<li>压缩列表是被用作列表键和哈希键的底层实现之一</li>
-<li>专为节约内存而设计的顺序性数据结构</li>
-<li>每个节点可以保存字节数组或者整数值</li>
-</ul>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《Redis设计与实现》</p>
-]]></content>
-      <categories>
-        <category>Redis</category>
-      </categories>
-      <tags>
-        <tag>缓存</tag>
-        <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>RabbitMq入门教程</title>
-    <url>/blog/2020/12/29/RabbitMq/</url>
-    <content><![CDATA[<h2 id="官网简介"><a href="#官网简介" class="headerlink" title="官网简介"></a>官网简介</h2><pre><code>RabbitMQ是部署最广泛的开源消息代理
-RabbitMQ轻量级，易于在内部和云中部署。
-它支持多种消息传递协议。
-RabbitMQ可以部署在分布式和联合配置中，以满足高规模，高可用性要求</code></pre>
-<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><pre><code>1.异步消息：
-    支持多种消息传递协议，消息队列，传递确认，灵活路由到队列，多种交换类型。
-2.语言支持：
-    与BOSH，Chef，Docker和Puppet一起部署。使用喜欢的编程语言开发跨语言消息，例如：Java，.NET，PHP，Python，JavaScript，Ruby，Go 等等。
-3.分布式部署：
-    部署为集群以实现高可用性和吞吐量; 联合多个可用区和区域。
-4.工具和插件：
-    支持持续集成，运营指标和与其他企业系统集成的 各种工具和插件。灵活的插件方法，用于扩展RabbitMQ功能。
-5.管理与监督：
-    用于管理和监控 RabbitMQ的HTTP-API，命令行工具和UI 。
-6.企业&amp;云: 
-    可插拔身份验证，授权，支持TLS和LDAP。轻量级，易于部署在公共云和私有云中。</code></pre>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><pre><code>1.安装erlang yum库 ---&gt;2.安装erlang ---&gt;3.安装rabbitMQ yum库 ---&gt; 4.安装rabbitMQ
-
-（推荐使用https://packagecloud.io/简单便捷,使用提供的bash指令即可）
-依赖于erlang语言，所以需要先安装erlang环境
-安装erlang yum库： 
-    curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | sudo bash
-    若出现 
-    error: cannot open Packages database in /var/lib/rpm 
-    是因为rpm db 出现了问题这是需要进行rpm db的重建，如下操作：
-
-    cd /var/lib/rpm     
-     # rpmdb所在目录
-
-    ls | grep ‘db.‘     
-    # 列出相关rpmdb文件
-
-    for i in $(ls | grep ‘db.‘);do mv $i $i.bak;done   
-    # 将原rpmdb文件都更名为结尾带.bak的文件
-    或者  
-    rm -f __db.*     
-    # 清除原rpmdb文件
-
-    rpm --rebuilddb    
-     # 重建rpm数据库
-
-    yum clean all     
-    # 清除所有yum的缓存
-
-再重新执行安装命令,成功如下图：</code></pre>
-<p><img src="http://106.12.192.199/install_erlang_yum.png" alt="install erlang yum"></p>
-<pre><code>安装erlang： yum install erlang 成功如下图</code></pre>
-<p><img src="http://106.12.192.199/install_erlang.png" alt="install erlang"></p>
-<pre><code>安装rabbitMQ  yum库：
-curl -s [https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh](https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh) | sudo bash
-安装成功如图:</code></pre>
-<p><img src="http://106.12.192.199/install_rabbitmq_yum.png" alt="install rabbitmq yum"></p>
-<pre><code> 导入签名：
-
-rpm --import https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey
-
-rpm --import https://packagecloud.io/gpg.key
-
-实现向前兼容
-
-安装rabbitMQ： yum install rabbitmq-server</code></pre>
-<p><img src="http://106.12.192.199/install_rabbitmq.png" alt="install rabbitmq"></p>
-<pre><code>安装到此完成</code></pre>
-<h2 id="服务相关基础指令"><a href="#服务相关基础指令" class="headerlink" title="服务相关基础指令"></a>服务相关基础指令</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">启动：  </span><br><span class="line">&#x2F;bin&#x2F;systemctl start rabbitmq-server.service</span><br><span class="line"></span><br><span class="line">关闭：</span><br><span class="line">&#x2F;bin&#x2F;systemctl stop rabbitmq-server.service</span><br><span class="line"></span><br><span class="line">查看插件状态：</span><br><span class="line">rabbitmqctl status| grep listeners</span><br><span class="line"></span><br><span class="line">查看状态结果：</span><br><span class="line">&#123;listeners,[&#123;clustering,25672,&quot;::&quot;&#125;,&#123;amqp,5672,&quot;::&quot;&#125;,&#123;http,15672,&quot;::&quot;&#125;]&#125;</span><br><span class="line"></span><br><span class="line">启动管理UI：</span><br><span class="line">rabbitmq-plugins enable rabbitmq_management    访问端口 ：15672</span><br><span class="line"></span><br><span class="line">创建用户：</span><br><span class="line">rabbitmqctl add_user admin admin</span><br><span class="line"></span><br><span class="line">赋权：</span><br><span class="line">rabbitmqctl set_user_tags admin administrator （webUI）</span><br><span class="line">rabbitmqctl set_permissions -p &#x2F; admin &quot;.*&quot; &quot;.*&quot; &quot;.*&quot; （赋权连接）</span><br><span class="line"></span><br><span class="line">开机启动： chkconfig rabbitmq-server on</span><br><span class="line"></span><br><span class="line">rabbitmq启动后需要将rabbitmq_management插件启用，这样才可以在浏览器中访问rabbimq的图形化监控中心</span><br><span class="line">图形化监控中心地址：http:&#x2F;&#x2F;$&#123;ip&#125;:15672&#x2F; 默认使用 guest&#x2F;guest 登录</span><br></pre></td></tr></table></figure>
-<h3 id="rabbirmq-登录页面"><a href="#rabbirmq-登录页面" class="headerlink" title="rabbirmq 登录页面"></a>rabbirmq 登录页面</h3><p><img src="http://106.12.192.199/rabbitmq_login.png" alt="rabbitmq_login"></p>
-<h3 id="rabbitmq-管理页面"><a href="#rabbitmq-管理页面" class="headerlink" title="rabbitmq 管理页面"></a>rabbitmq 管理页面</h3><p><img src="http://106.12.192.199/rabbitmq_admin.png" alt="rabbitmq_admin"></p>
-<h2 id="生产-server-消费"><a href="#生产-server-消费" class="headerlink" title="生产-server-消费"></a>生产-server-消费</h2><p><img src="http://106.12.192.199/rabbitmq_framework.png" alt="rabbitmq_framework"></p>
-<h3 id="主要组成部分"><a href="#主要组成部分" class="headerlink" title="主要组成部分"></a>主要组成部分</h3><pre><code>virtualPort：
-每个virtual host本质上都是一个RabbitMQ Server，拥有它自己的queue，exchange，和bind rule等等。这保证了你可以在多个不同的application中使用RabbitMQ。
-
-channel：
-与RabbitMQ打交道的最重要的一个接口，我们大部分的业务操作是在Channel这个接口中完成的，包括定义Queue、定义Exchange、绑定Queue与Exchange、发布消息等。
-
-exchange： 
-Exchange是属于Vhost的。同一个Vhost不能有重复的Exchange名称。 消息生产者发送消息时并不是直接发送到queue，而是发送到exchange，exchange再通过相关匹配设置将消息投放到对应的queue中供消费者消费。
-
-queue：
-消费者通过queue来获取消息进行消费</code></pre>
-<h4 id="exchange的类型"><a href="#exchange的类型" class="headerlink" title="exchange的类型"></a>exchange的类型</h4><pre><code>1.Direct Exchange – 处理路由键。需要将一个队列绑定到交换机上，要求该消息与一个特定的路由键完全匹配。这是一个完整的匹配。如果一个队列绑定到该交换机上要求路由键 “dog”，则只有被标记为“dog”的消息才被转发，不会转发dog.puppy，也不会转发dog.guard，只会转发dog。(一对一的匹配才会转发)</code></pre>
-<p><img src="http://106.12.192.199/direct.png" alt="direct"></p>
-<pre><code>2. Fanout Exchange – 不处理路由键。你只需要简单的将队列绑定到交换机上。一个发送到交换机的消息都会被转发到与该交换机绑定的所有队列上。很像子网广播，每台子网内的主机都获得了一份复制的消息。Fanout交换机转发消息是最快的（也号称广播转发消息，会转发到所有绑定此交换机的队列上）</code></pre>
-<p><img src="http://106.12.192.199/fanout.png" alt="fanout"></p>
-<pre><code>3.Topic Exchange – 将路由键和某模式进行匹配。此时队列需要绑定要一个模式上。符号“#”匹配一个或多个词，符号“*”匹配不多不少一个词。因此“audit.#”能够匹配到“audit.irs.corporate”，但是“audit.*” 只会匹配到“audit.irs”。（匹配才会转发）</code></pre>
-<p><img src="http://106.12.192.199/topic.png" alt="topic"></p>
-<h2 id="JAVA代码实现"><a href="#JAVA代码实现" class="headerlink" title="JAVA代码实现"></a>JAVA代码实现</h2><h3 id="pom-xml"><a href="#pom-xml" class="headerlink" title="pom.xml"></a>pom.xml</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;com.rabbitmq&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;amqp-client&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;5.1.2&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="公共代码"><a href="#公共代码" class="headerlink" title="公共代码"></a>公共代码</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;配置信息</span><br><span class="line">public static final String RABBIT_HOST&#x3D;&quot;106.12.192.199&quot;;</span><br><span class="line">public static final String RABBIT_USERNAME&#x3D;&quot;admin&quot;;</span><br><span class="line">public static final String RABBIT_PASSWORD&#x3D;&quot;admin&quot;;</span><br><span class="line">public static final String RABBIT_VIRTUAL_HOST&#x3D;&quot;&#x2F;&quot;;</span><br><span class="line">public static final Integer RABBIT_PORT&#x3D; 5672;</span><br><span class="line">public static final String  RABBIT_QUEUE_NAME&#x3D;&quot;test&quot;;</span><br><span class="line">public static final String  RABBIT_EXCHANGE_NAME&#x3D;&quot;test-exchange&quot;;</span><br><span class="line">public static final String  RABBIT_ROUTE_KEY&#x3D;&quot;test-route&quot;;</span><br><span class="line">public static final String  RABBIT_CONSUMER_TAG&#x3D;&quot;test-customer&quot;;</span><br><span class="line"></span><br><span class="line"> &#x2F;&#x2F;获取链接</span><br><span class="line">public Connection getConnection() throws IOException, TimeoutException &#123;</span><br><span class="line">    &#x2F;&#x2F;获取连接</span><br><span class="line">    ConnectionFactory connectionFactory &#x3D; new ConnectionFactory();</span><br><span class="line">    connectionFactory.setUsername(RABBIT_USERNAME);</span><br><span class="line">    connectionFactory.setPassword(RABBIT_PASSWORD);</span><br><span class="line">    connectionFactory.setVirtualHost(RABBIT_VIRTUAL_HOST);</span><br><span class="line">    connectionFactory.setHost(RABBIT_HOST);</span><br><span class="line">    connectionFactory.setPort(RABBIT_PORT);</span><br><span class="line">    return connectionFactory.newConnection();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;生产者</span><br><span class="line">@Test</span><br><span class="line">public  void test1() throws IOException, TimeoutException &#123;</span><br><span class="line">    Connection connection &#x3D; getConnection();</span><br><span class="line">    Channel channel &#x3D; null;</span><br><span class="line">    try&#123;</span><br><span class="line">        &#x2F;&#x2F;创建一个通道</span><br><span class="line">        channel &#x3D; connection.createChannel();</span><br><span class="line">        channel.exchangeDeclare(RABBIT_EXCHANGE_NAME,BuiltinExchangeType.TOPIC);</span><br><span class="line">        &#x2F;&#x2F;声明一个队列</span><br><span class="line">        channel.queueDeclare(RABBIT_QUEUE_NAME + 1, false,false,false,null);</span><br><span class="line">        &#x2F;&#x2F;声明一个队列</span><br><span class="line">        channel.queueDeclare(RABBIT_QUEUE_NAME + 2, false,false,false,null);</span><br><span class="line">        &#x2F;&#x2F;绑定交换机和队列</span><br><span class="line">        channel.queueBind(RABBIT_QUEUE_NAME+ 1,RABBIT_EXCHANGE_NAME,RABBIT_ROUTE_KEY);</span><br><span class="line">        channel.queueBind(RABBIT_QUEUE_NAME+ 2,RABBIT_EXCHANGE_NAME,RABBIT_ROUTE_KEY);</span><br><span class="line">        &#x2F;&#x2F;发送消息</span><br><span class="line">        String content &#x3D; &quot;RABBITMQ-TEST&quot;;</span><br><span class="line">        channel.basicPublish(RABBIT_EXCHANGE_NAME,RABBIT_ROUTE_KEY,null, content.getBytes());</span><br><span class="line">        System.out.println(&quot;发送完成&quot;);</span><br><span class="line">    &#125;catch(Exception e)&#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;finally &#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            channel.close();</span><br><span class="line">            connection.close();</span><br><span class="line">        &#125;catch (Exception e)&#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;消费者</span><br><span class="line">@Test</span><br><span class="line">public void test2() throws IOException, TimeoutException &#123;</span><br><span class="line">    Connection connection &#x3D; getConnection();</span><br><span class="line">    Channel channel &#x3D; null;</span><br><span class="line">    try&#123;</span><br><span class="line">        channel &#x3D; connection.createChannel();</span><br><span class="line">        channel.exchangeDeclare(RABBIT_EXCHANGE_NAME,BuiltinExchangeType.TOPIC);</span><br><span class="line">        &#x2F;&#x2F;声明一个队列</span><br><span class="line">        channel.queueDeclare(RABBIT_QUEUE_NAME + 1, false,false,false,null);</span><br><span class="line">        &#x2F;&#x2F;绑定交换机和队列</span><br><span class="line">        channel.queueBind(RABBIT_QUEUE_NAME + 1,RABBIT_EXCHANGE_NAME,RABBIT_ROUTE_KEY);</span><br><span class="line">        boolean autoAck &#x3D; true ;</span><br><span class="line"></span><br><span class="line">        channel.basicConsume(RABBIT_QUEUE_NAME + 1, autoAck,RABBIT_CONSUMER_TAG ,new DefaultConsumer(channel) &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void handleConsumeOk(String consumerTag) &#123;</span><br><span class="line">                System.out.println(&quot;handleConsumeOk:consumerTag---&gt;&quot; + consumerTag);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void handleCancelOk(String consumerTag) &#123;</span><br><span class="line">                System.out.println(&quot;handleCancelOk:consumerTag---&gt;&quot; + consumerTag);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void handleCancel(String consumerTag) throws IOException &#123;</span><br><span class="line">                System.out.println(&quot;handleCancel:consumerTag---&gt;&quot; + consumerTag);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void handleShutdownSignal(String consumerTag, ShutdownSignalException sig) &#123;</span><br><span class="line">                System.out.println(&quot;handleShutdownSignal:consumerTag---&gt;&quot; + consumerTag);</span><br><span class="line">                System.out.println(&quot;handleShutdownSignal:sig---&gt;&quot; + sig);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void handleRecoverOk(String consumerTag) &#123;</span><br><span class="line">                System.out.println(&quot;handleRecoverOk:consumerTag---&gt;&quot; + consumerTag);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException &#123;</span><br><span class="line">                System.out.println(&quot;handleDelivery:consumerTag---&gt;&quot; + consumerTag);</span><br><span class="line">                System.out.println(&quot;handleDelivery:envelope---&gt;&quot; + envelope);</span><br><span class="line">                System.out.println(&quot;handleDelivery:properties---&gt;&quot; + properties);</span><br><span class="line">                System.out.println(&quot;handleDelivery:body---&gt;&quot; + new String(body));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        while(true)&#123;&#125;</span><br><span class="line">    &#125;catch(Exception e)&#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;finally &#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            channel.close();</span><br><span class="line">            connection.close();</span><br><span class="line">        &#125;catch (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"> &#x2F;&#x2F;删除交换机以及队列</span><br><span class="line">@Test</span><br><span class="line">public void test3() throws IOException, TimeoutException &#123;</span><br><span class="line">    Connection connection &#x3D; getConnection();</span><br><span class="line">    Channel channel &#x3D; connection.createChannel();</span><br><span class="line">    channel.queueDelete(RABBIT_QUEUE_NAME);</span><br><span class="line">    channel.exchangeDelete(RABBIT_EXCHANGE_NAME);</span><br><span class="line">&#125;</span><br><span class="line">   </span><br></pre></td></tr></table></figure>
-<h2 id="RabbitMQ中的消息不可达returnlistener的使用"><a href="#RabbitMQ中的消息不可达returnlistener的使用" class="headerlink" title="RabbitMQ中的消息不可达returnlistener的使用"></a>RabbitMQ中的消息不可达returnlistener的使用</h2><pre><code>模拟的时候,需要先将消费者启动，channel.basicPublish第三个参数mandatory必须为true，不然会直接删除消息而不会返回。</code></pre>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;生产者</span><br><span class="line">@Test</span><br><span class="line">public  void test1() throws IOException, TimeoutException &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    Connection connection &#x3D; getConnection();</span><br><span class="line">    Channel channel &#x3D; null;</span><br><span class="line">    try&#123;</span><br><span class="line">        &#x2F;&#x2F;创建一个通道</span><br><span class="line">        channel &#x3D; connection.createChannel();</span><br><span class="line">        &#x2F;&#x2F;发送消息</span><br><span class="line">        String content &#x3D; &quot;RABBITMQ-TEST&quot;;</span><br><span class="line">        channel.addReturnListener((replyCode, replyText, exchange, routingKey, properties, body) -&gt; System.out.println(new String(body)));</span><br><span class="line">        channel.basicPublish(RABBIT_EXCHANGE_NAME,&quot;abc.save&quot;,true,null, content.getBytes());</span><br><span class="line">    &#125;catch(Exception e)&#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;finally &#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            channel.close();</span><br><span class="line">            connection.close();</span><br><span class="line">        &#125;catch (Exception e)&#123;</span><br><span class="line">         e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="RabbitMQ中的消息确认消息Confirm的使用"><a href="#RabbitMQ中的消息确认消息Confirm的使用" class="headerlink" title="RabbitMQ中的消息确认消息Confirm的使用"></a>RabbitMQ中的消息确认消息Confirm的使用</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;生产者</span><br><span class="line">@Test</span><br><span class="line">public  void test1() throws IOException, TimeoutException &#123;</span><br><span class="line">    Connection connection &#x3D; getConnection();</span><br><span class="line">    Channel channel &#x3D; null;</span><br><span class="line">    try&#123;</span><br><span class="line">        &#x2F;&#x2F;创建一个通道</span><br><span class="line">        channel &#x3D; connection.createChannel();</span><br><span class="line">        &#x2F;&#x2F;指定我们的消息投递模式: 消息的确认模式</span><br><span class="line">        channel.confirmSelect();</span><br><span class="line">        &#x2F;&#x2F;发送消息</span><br><span class="line">        String content &#x3D; &quot;RABBITMQ-TEST&quot;;</span><br><span class="line">        channel.basicPublish(RABBIT_EXCHANGE_NAME,&quot;abc.save&quot;,true,null, content.getBytes());</span><br><span class="line">        &#x2F;&#x2F;添加一个确认监听</span><br><span class="line">        channel.addConfirmListener(new ConfirmListener() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void handleAck(long deliveryTag, boolean multiple) throws IOException &#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void handleNack(long deliveryTag, boolean multiple) throws IOException &#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;catch(Exception e)&#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;finally &#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            channel.close();</span><br><span class="line">            connection.close();</span><br><span class="line">        &#125;catch (Exception e)&#123;</span><br><span class="line">         e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>RabbitMq</category>
-      </categories>
-      <tags>
-        <tag>消息队列</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Redis底层实现的数据结构</title>
-    <url>/blog/2021/01/04/Redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E5%AF%B9%E8%B1%A1/</url>
-    <content><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>本篇文章主要介绍Redis底层实现的数据结构。</p>
-<blockquote>
-<p>Redis 是一个基于内存的高性能key-value数据库。整个数据库统统加载在内存当中进行操作，支持保存多种数据结构，每秒可以处理超过 10万次读写操作，是已知性能最快的Key-Value DB。<br>Redis的主要缺点是数据库容量受到物理内存的限制，不能用作海量数据的高性能读写，因此Redis适合的场景主要局限在较小数据量的高性能操作和运算上。</p>
-</blockquote>
-<h2 id="底层实现"><a href="#底层实现" class="headerlink" title="底层实现"></a>底层实现</h2><h3 id="sds简单动态字符串"><a href="#sds简单动态字符串" class="headerlink" title="sds简单动态字符串"></a>sds简单动态字符串</h3><h4 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sdshdr</span> &#123;</span></span><br><span class="line">    <span class="comment">// 记录 buf 数组中已使用字节的数量</span></span><br><span class="line">    <span class="comment">// 等于 SDS 所保存字符串的长度</span></span><br><span class="line">    <span class="keyword">int</span> len;</span><br><span class="line">    <span class="comment">// 记录 buf 数组中未使用字节的数量</span></span><br><span class="line">    <span class="keyword">int</span> <span class="built_in">free</span>;</span><br><span class="line">    <span class="comment">// 字节数组，用于保存字符串或二进制数据</span></span><br><span class="line">    <span class="keyword">char</span> buf[];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p><img src="https://sluggard-blog.oss-cn-beijing.aliyuncs.com/createblog/Redis_SDS.jpg" alt="SDS 数据存储示例"></p>
-<h4 id="与C字符串相比的优点"><a href="#与C字符串相比的优点" class="headerlink" title="与C字符串相比的优点"></a>与C字符串相比的优点</h4><ul>
-<li>末尾以’\0’结束，用于兼容C语言的函数</li>
-<li>通过记录len，查询字符串长度的查询的时间复杂度为O(1)，而C的字符串需要遍历，时间复杂度为O(n)</li>
-<li>以free来记录空闲空间，可以杜绝缓冲区溢出</li>
-<li>空间预分配的方式，减少修改字符串时带来的内存重分配次数，在创建或者扩容的时候数据分配的空间为 len + free + 1，len与free 的分配空间相等</li>
-<li>惰性空间释放，在缩短时，并不会将内存释放掉，只是将释放的空间通过free来记录</li>
-<li>二进制安全,SDS的buf是字节数组，不仅是保存字符串，还可以保存任意格式的二进制数据</li>
-</ul>
-<p><img src="https://sluggard-blog.oss-cn-beijing.aliyuncs.com/createblog/SDS_C_diff.png" alt="C字符串与SDS的区别总结"></p>
-<h3 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h3><h4 id="结构体-1"><a href="#结构体-1" class="headerlink" title="结构体"></a>结构体</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> &#123;</span></span><br><span class="line">    <span class="comment">// 前置节点</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">prev</span>;</span></span><br><span class="line">    <span class="comment">// 后置节点</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">next</span>;</span></span><br><span class="line">    <span class="comment">// 节点的值</span></span><br><span class="line">    <span class="keyword">void</span> *value;</span><br><span class="line">&#125; listNode;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">list</span> &#123;</span></span><br><span class="line">    <span class="comment">// 表头节点</span></span><br><span class="line">    listNode *head;</span><br><span class="line">    <span class="comment">// 表尾节点</span></span><br><span class="line">    listNode *tail;</span><br><span class="line">    <span class="comment">// 链表所包含的节点数量</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> len;</span><br><span class="line">    <span class="comment">// 节点值复制函数</span></span><br><span class="line">    <span class="keyword">void</span> *(*dup)(<span class="keyword">void</span> *ptr);</span><br><span class="line">    <span class="comment">// 节点值释放函数</span></span><br><span class="line">    <span class="keyword">void</span> (*<span class="built_in">free</span>)(<span class="keyword">void</span> *ptr);</span><br><span class="line">    <span class="comment">// 节点值对比函数</span></span><br><span class="line">    <span class="keyword">int</span> (*match)(<span class="keyword">void</span> *ptr, <span class="keyword">void</span> *key);</span><br><span class="line">&#125; <span class="built_in">list</span>;</span><br></pre></td></tr></table></figure>
-<p><img src="https://sluggard-blog.oss-cn-beijing.aliyuncs.com/createblog/Redis_LinkedList.jpg" alt="链表的数据结构"></p>
-<h4 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h4><ul>
-<li>双链结构：prev和next指针， 获取某个节点的前置节点和后置节点的复杂度都是O(1)</li>
-<li>无环：表头、表位节点指针都指向null</li>
-<li>带表头指针和表尾指针：通过 list 结构的 head 指针和 tail 指针， 程序获取链表的表头节点和表尾节点的复杂度为 O(1)</li>
-<li>带链表长度计数器：程序使用 list 结构的 len 属性来对 list 持有的链表节点进行计数， 程序获取链表中节点数量的复杂度为 O(1)</li>
-<li>多态：链表节点使用 void* 指针来保存节点值， 并且可以通过 list 结构的 dup 、 free 、 match 三个属性为节点值设置类型特定函数， 所以链表可以用于保存各种不同类型的值</li>
-</ul>
-<h3 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h3><h4 id="结构体-2"><a href="#结构体-2" class="headerlink" title="结构体"></a>结构体</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictht</span> &#123;</span></span><br><span class="line">    <span class="comment">// 哈希表数组</span></span><br><span class="line">    dictEntry **table;</span><br><span class="line">    <span class="comment">// 哈希表大小</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> size;</span><br><span class="line">    <span class="comment">// 哈希表大小掩码，用于计算索引值</span></span><br><span class="line">    <span class="comment">// 总是等于 size - 1</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> sizemask;</span><br><span class="line">    <span class="comment">// 该哈希表已有节点的数量</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> used;</span><br><span class="line">&#125; dictht;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> &#123;</span></span><br><span class="line">    <span class="comment">// 键</span></span><br><span class="line">    <span class="keyword">void</span> *key;</span><br><span class="line">    <span class="comment">// 值</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        <span class="keyword">void</span> *val;</span><br><span class="line">        <span class="keyword">uint64_t</span> u64;</span><br><span class="line">        <span class="keyword">int64_t</span> s64;</span><br><span class="line">    &#125; v;</span><br><span class="line">    <span class="comment">// 指向下个哈希表节点，形成链表</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125; dictEntry;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dict</span> &#123;</span></span><br><span class="line">    <span class="comment">// 类型特定函数</span></span><br><span class="line">    dictType *type;</span><br><span class="line">    <span class="comment">// 私有数据</span></span><br><span class="line">    <span class="keyword">void</span> *privdata;</span><br><span class="line">    <span class="comment">// 哈希表</span></span><br><span class="line">    dictht ht[<span class="number">2</span>];</span><br><span class="line">    <span class="comment">// rehash 索引</span></span><br><span class="line">    <span class="comment">// 当 rehash 不在进行时，值为 -1</span></span><br><span class="line">    <span class="keyword">int</span> rehashidx; <span class="comment">/* rehashing not in progress if rehashidx == -1 */</span></span><br><span class="line">&#125; dict;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictType</span> &#123;</span></span><br><span class="line">    <span class="comment">// 计算哈希值的函数</span></span><br><span class="line">    <span class="function"><span class="keyword">unsigned</span> <span class="title">int</span> <span class="params">(*hashFunction)</span><span class="params">(<span class="keyword">const</span> <span class="keyword">void</span> *key)</span></span>;</span><br><span class="line">    <span class="comment">// 复制键的函数</span></span><br><span class="line">    <span class="keyword">void</span> *(*keyDup)(<span class="keyword">void</span> *privdata, <span class="keyword">const</span> <span class="keyword">void</span> *key);</span><br><span class="line">    <span class="comment">// 复制值的函数</span></span><br><span class="line">    <span class="keyword">void</span> *(*valDup)(<span class="keyword">void</span> *privdata, <span class="keyword">const</span> <span class="keyword">void</span> *obj);</span><br><span class="line">    <span class="comment">// 对比键的函数</span></span><br><span class="line">    <span class="keyword">int</span> (*keyCompare)(<span class="keyword">void</span> *privdata, <span class="keyword">const</span> <span class="keyword">void</span> *key1, <span class="keyword">const</span> <span class="keyword">void</span> *key2);</span><br><span class="line">    <span class="comment">// 销毁键的函数</span></span><br><span class="line">    <span class="keyword">void</span> (*keyDestructor)(<span class="keyword">void</span> *privdata, <span class="keyword">void</span> *key);</span><br><span class="line">    <span class="comment">// 销毁值的函数</span></span><br><span class="line">    <span class="keyword">void</span> (*valDestructor)(<span class="keyword">void</span> *privdata, <span class="keyword">void</span> *obj);</span><br><span class="line">&#125; dictType;</span><br></pre></td></tr></table></figure>
-<p><img src="https://sluggard-blog.oss-cn-beijing.aliyuncs.com/createblog/Redis_dict.jpg" alt="字典的结构体"></p>
-<h4 id="字典数据插入流程"><a href="#字典数据插入流程" class="headerlink" title="字典数据插入流程"></a>字典数据插入流程</h4><ul>
-<li>通过MurmurHash2 算法来计算键的值</li>
-<li>发生hash冲突的时候，通过拉链法（链地址法）来解决</li>
-<li>扩容/收缩，执行 rehash （重新散列）操作来完成，借助第二个哈希表来完成<ul>
-<li>为字典的 <code>ht[1]</code> 哈希表分配空间， 这个哈希表的空间大小取决于要执行的操作， 以及 <code>ht[0]</code> 当前包含的键值对数量<ul>
-<li>如果执行的是扩展操作， 那么 <code>ht[1]</code> 的大小为第一个大于等于 <code>ht[0].used * 2</code> 的2^n；</li>
-<li>如果执行的是收缩操作， 那么 <code>ht[1]</code> 的大小为第一个大于等于 <code>ht[0].used</code> 的2^n。</li>
-</ul>
-</li>
-<li>将保存在 <code>ht[0]</code> 中的所有键值对 rehash 到 <code>ht[1]</code> 上面： rehash 指的是重新计算键的哈希值和索引值， 然后将键值对放置到 <code>ht[1]</code> 哈希表的指定位置上。</li>
-<li>当 <code>ht[0]</code> 包含的所有键值对都迁移到了 <code>ht[1]</code> 之后 （<code>ht[0]</code> 变为空表）， 释放 <code>ht[0]</code> ， 将 <code>ht[1]</code> 设置为 <code>ht[0]</code> ， 并在 <code>ht[1]</code> 新创建一个空白哈希表， 为下一次 rehash 做准备</li>
-</ul>
-</li>
-</ul>
-<h4 id="哈希表的扩展与收缩"><a href="#哈希表的扩展与收缩" class="headerlink" title="哈希表的扩展与收缩"></a>哈希表的扩展与收缩</h4><ul>
-<li>触发时机（负载因子 load_factor = ht[0].used / ht[0].size）<ul>
-<li>服务器目前没有在执行 BGSAVE 命令或者 BGREWRITEAOF 命令， 并且哈希表的负载因子大于等于 <code>1</code> </li>
-<li>服务器目前正在执行 BGSAVE 命令或者 BGREWRITEAOF 命令， 并且哈希表的负载因子大于等于 <code>5</code></li>
-</ul>
-</li>
-</ul>
-<h4 id="渐进式-rehash-执行期间的哈希表操作"><a href="#渐进式-rehash-执行期间的哈希表操作" class="headerlink" title="渐进式 rehash 执行期间的哈希表操作"></a>渐进式 rehash 执行期间的哈希表操作</h4><ol>
-<li>为 <code>ht[1]</code> 分配空间， 让字典同时持有 <code>ht[0]</code> 和 <code>ht[1]</code> 两个哈希表。</li>
-<li>在字典中维持一个索引计数器变量 <code>rehashidx</code> ， 并将它的值设置为 <code>0</code> ， 表示 rehash 工作正式开始。</li>
-<li>在 rehash 进行期间， 每次对字典执行添加、删除、查找或者更新操作时， 程序除了执行指定的操作以外， 还会顺带将 <code>ht[0]</code> 哈希表在 <code>rehashidx</code> 索引上的所有键值对 rehash 到 <code>ht[1]</code> ， 当 rehash 工作完成之后， 程序将 <code>rehashidx</code> 属性的值增一。</li>
-<li>随着字典操作的不断执行， 最终在某个时间点上， <code>ht[0]</code> 的所有键值对都会被 rehash 至 <code>ht[1]</code> ， 这时程序将 <code>rehashidx</code> 属性的值设为 <code>-1</code> ， 表示 rehash 操作已完成。</li>
-<li>进行渐进式 rehash 的过程中， 字典会同时使用 <code>ht[0]</code> 和 <code>ht[1]</code> 两个哈希表。删除、查找、更新操作会先在<code>ht[0]</code>上进行查找，再到<code>ht[1]</code>上查找操作；而新增操作会直接保存到<code>ht[1]</code>中。</li>
-</ol>
-<h3 id="跳表"><a href="#跳表" class="headerlink" title="跳表"></a>跳表</h3><h4 id="结构体-3"><a href="#结构体-3" class="headerlink" title="结构体"></a>结构体</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> &#123;</span></span><br><span class="line">    <span class="comment">// 后退指针</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">backward</span>;</span></span><br><span class="line">    <span class="comment">// 分值</span></span><br><span class="line">    <span class="keyword">double</span> score;</span><br><span class="line">    <span class="comment">// 成员对象</span></span><br><span class="line">    robj *obj;</span><br><span class="line">    <span class="comment">// 层</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistLevel</span> &#123;</span></span><br><span class="line">        <span class="comment">// 前进指针</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">forward</span>;</span></span><br><span class="line">        <span class="comment">// 跨度</span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> span;</span><br><span class="line">    &#125; level[];</span><br><span class="line">&#125; zskiplistNode;</span><br></pre></td></tr></table></figure>
-<p><img src="https://sluggard-blog.oss-cn-beijing.aliyuncs.com/createblog/Redis_skiplist.jpg" alt="跳表数据结构"></p>
-<h4 id="跳表的组成"><a href="#跳表的组成" class="headerlink" title="跳表的组成"></a>跳表的组成</h4><ul>
-<li>分值和成员：<ul>
-<li>节点的分值(score属性)是一个double类型的浮点数，跳跃表中的所有节点都按分值从小到大来排序</li>
-<li>节点的成员对象(obj属性)是一个指针，它指向一个字符串对象，而字符串对象则保存着一个SDS值。</li>
-</ul>
-</li>
-<li>后退指针( backward 属性 ) ：用于从表尾向表头方向访问节点：跟可以一次跳过多个节点的前进指针不同，因为每个节点只有一个后退指针，所以每次只能后退至前一个节点。</li>
-<li>层：  level 数组可以包含多个元素，程序可以通过这些层来加快访问其他节点的速度，一般来说，层的数量越多，访问其他节点的速度就越快</li>
-<li>前进指针：每个层都有一个指向表尾方向的前进指针(level[i].forward属性)，用于从表头向表尾方向访问节点</li>
-<li>跨度：层的跨度（level[i].span 属性）用于记录两个节点之间的距离（指向 NULL 的所有前进指针的跨度都为0）</li>
-<li>最后一层会包括全部数据，层级越高，包含的数据越少</li>
-<li>支持平均O ( logN ) 、最坏 O(N) 复杂度的节点查找</li>
-</ul>
-<h3 id="整数集合"><a href="#整数集合" class="headerlink" title="整数集合"></a>整数集合</h3><h4 id="结构体-4"><a href="#结构体-4" class="headerlink" title="结构体"></a>结构体</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">intset</span> &#123;</span></span><br><span class="line">    <span class="comment">// 编码方式</span></span><br><span class="line">    <span class="keyword">uint32_t</span> encoding;</span><br><span class="line">    <span class="comment">// 集合包含的元素数量</span></span><br><span class="line">    <span class="keyword">uint32_t</span> length;</span><br><span class="line">    <span class="comment">// 保存元素的数组</span></span><br><span class="line">    <span class="keyword">int8_t</span> contents[];</span><br><span class="line">&#125; intset;</span><br></pre></td></tr></table></figure>
-<p><img src="https://sluggard-blog.oss-cn-beijing.aliyuncs.com/createblog/Redis_intset.jpg" alt="整数集合结构"></p>
-<h4 id="特性-1"><a href="#特性-1" class="headerlink" title="特性"></a>特性</h4><ul>
-<li>保存的数据类型：<code>int16_t</code>、<code>int32_t</code>、<code>int64_t</code>，只能是一种类型，所以会进行升级操作</li>
-<li>升级（提升灵活性（可以存多种类型，自动进行转换）、节约内存（按需分配内存空间））<ul>
-<li>根据新元素的类型， 扩展整数集合底层数组的空间大小， 并为新元素分配空间</li>
-<li>将底层数组现有的所有元素都转换成与新元素相同的类型， 并将类型转换后的元素放置到正确的位上， 而且在放置元素的过程中， 需要继续维持底层数组的有序性质不变</li>
-<li>将新元素添加到底层数组里面</li>
-<li>升级过程时从后往前依次进行升级</li>
-</ul>
-</li>
-<li>降级： 不支持降级，升级之后编码就会一直保持</li>
-</ul>
-<h3 id="压缩列表"><a href="#压缩列表" class="headerlink" title="压缩列表"></a>压缩列表</h3><h4 id="结构体-5"><a href="#结构体-5" class="headerlink" title="结构体"></a>结构体</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">ziplist</span> &#123;</span></span><br><span class="line">    <span class="comment">// 记录整个压缩列表占用的内存字节数</span></span><br><span class="line">    <span class="keyword">uint32_t</span> zlbytes;</span><br><span class="line">    <span class="comment">// 记录压缩列表表尾节点距离压缩列表的起始地址有多少字节</span></span><br><span class="line">    <span class="keyword">uint32_t</span> zltail;</span><br><span class="line">    <span class="comment">// 记录了压缩列表包含的节点数量</span></span><br><span class="line">    <span class="keyword">uint16_t</span> zllen;</span><br><span class="line">    <span class="comment">// 压缩列表包含的各个节点</span></span><br><span class="line">    列表节点 entryX;</span><br><span class="line">    <span class="comment">// 特殊值 0xFF （十进制 255 ），用于标记压缩列表的末端。</span></span><br><span class="line">    <span class="keyword">uint8_t</span> zlend;</span><br><span class="line">&#125; ziplist;</span><br></pre></td></tr></table></figure>
-<p><img src="https://sluggard-blog.oss-cn-beijing.aliyuncs.com/createblog/Redis_ziplist.jpg" alt="压缩列表结构"></p>
-<h4 id="previous-entry-length"><a href="#previous-entry-length" class="headerlink" title="previous_entry_length"></a>previous_entry_length</h4><ul>
-<li>以字节为单位，记录了亚索列表中前一个节点的长度</li>
-<li>长度：1字节/5字节<ul>
-<li>长度小于254字节，为1字节 以0x开头</li>
-<li>长度大于等于254，为5字节 以0xFE开头</li>
-</ul>
-</li>
-<li>通过该长度可以计算前一节点的起始地址</li>
-</ul>
-<h4 id="encoding"><a href="#encoding" class="headerlink" title="encoding"></a>encoding</h4><ul>
-<li>记录了几点的content属性所保存数据的类型及长度</li>
-<li>1、2、5字节长，值的最高位为00，01，10的是字节数据编码</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>编码</th>
-<th>编码长度</th>
-<th><code>content</code> 属性保存的值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>00bbbbbb</code></td>
-<td><code>1</code> 字节</td>
-<td>长度小于等于 <code>63</code> 字节的字节数组。</td>
-</tr>
-<tr>
-<td><code>01bbbbbb xxxxxxxx</code></td>
-<td><code>2</code> 字节</td>
-<td>长度小于等于 <code>16383</code> 字节的字节数组。</td>
-</tr>
-<tr>
-<td><code>10______ aaaaaaaa bbbbbbbb cccccccc dddddddd</code></td>
-<td><code>5</code> 字节</td>
-<td>长度小于等于 <code>4294967295</code> 的字节数组。</td>
-</tr>
-</tbody></table>
-<ul>
-<li>1字节长，值的最高位为11的是证书编码</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>编码</th>
-<th>编码长度</th>
-<th><code>content</code> 属性保存的值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>11000000</code></td>
-<td><code>1</code> 字节</td>
-<td><code>int16_t</code> 类型的整数。</td>
-</tr>
-<tr>
-<td><code>11010000</code></td>
-<td><code>1</code> 字节</td>
-<td><code>int32_t</code> 类型的整数。</td>
-</tr>
-<tr>
-<td><code>11100000</code></td>
-<td><code>1</code> 字节</td>
-<td><code>int64_t</code> 类型的整数。</td>
-</tr>
-<tr>
-<td><code>11110000</code></td>
-<td><code>1</code> 字节</td>
-<td><code>24</code> 位有符号整数。</td>
-</tr>
-<tr>
-<td><code>11111110</code></td>
-<td><code>1</code> 字节</td>
-<td><code>8</code> 位有符号整数。</td>
-</tr>
-<tr>
-<td><code>1111xxxx</code></td>
-<td><code>1</code> 字节</td>
-<td>使用这一编码的节点没有相应的 <code>content</code> 属性， 因为编码本身的 <code>xxxx</code> 四个位已经保存了一个介于 <code>0</code> 和<code>12</code> 之间的值， 所以它无须 <code>content</code> 属性。</td>
-</tr>
-</tbody></table>
-<h4 id="content"><a href="#content" class="headerlink" title="content"></a>content</h4><ul>
-<li>负责保存节点的值， 节点值可以是一个字节数组或者整数， 值的类型和长度由节点的 <code>encoding</code> 属性决定</li>
-</ul>
-<h4 id="特性-2"><a href="#特性-2" class="headerlink" title="特性"></a>特性</h4><ul>
 <li>可能会出现连锁更新<ul>
 <li>每个节点都处于250-253的临界值，新增节点大于等于254时，全部节点的previous_entry_length都会变成5个字节，导致全部节点都会超过254字节</li>
 <li>删除节点也可能会引发连锁更新</li>
