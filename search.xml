@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>博客搭建</title>
-    <url>/blog/2020/12/30/BuildBlog/</url>
+    <url>/2020/12/30/BuildBlog/</url>
     <content><![CDATA[<!-- 一直都想自己搭建一个博客，但又过于懒惰，一直就没有进行，今天偶然间了解到了一个博客搭建神器，可以依托github,gitlab以及码云等进行部署，通过Hexo + Next可以快速的搭建出一个即简洁又美观的博客,可以节省大量的时间。 -->
 
 <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Hexo 是高效的静态站点生成框架，它基于 Node.js。 通过 Hexo 你可以轻松地使用 Markdown 编写文章，除了 Markdown 本身的语法之外，还可以使用 Hexo 提供的 标签插件 来快速的插入特定形式的内容。在这篇文章中，假定你已经成功安装了 Hexo，并使用 Hexo 提供的命令创建了一个站点。接下来就进入正题吧！</p>
@@ -49,7 +49,7 @@
   </entry>
   <entry>
     <title>RabbitMq入门教程</title>
-    <url>/blog/2020/12/29/RabbitMq/</url>
+    <url>/2020/12/29/RabbitMq/</url>
     <content><![CDATA[<h2 id="官网简介"><a href="#官网简介" class="headerlink" title="官网简介"></a>官网简介</h2><pre><code>RabbitMQ是部署最广泛的开源消息代理
 RabbitMQ轻量级，易于在内部和云中部署。
 它支持多种消息传递协议。
@@ -148,7 +148,7 @@ queue：
   </entry>
   <entry>
     <title>Redis底层实现数据结构</title>
-    <url>/blog/2020/12/29/Redis%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</url>
+    <url>/2020/12/29/Redis%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</url>
     <content><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>本篇文章主要介绍Redis底层实现的数据结构。</p>
 <blockquote>
 <p>Redis 是一个基于内存的高性能key-value数据库。整个数据库统统加载在内存当中进行操作，支持保存多种数据结构，每秒可以处理超过 10万次读写操作，是已知性能最快的Key-Value DB。<br>Redis的主要缺点是数据库容量受到物理内存的限制，不能用作海量数据的高性能读写，因此Redis适合的场景主要局限在较小数据量的高性能操作和运算上。</p>
