@@ -24,19 +24,21 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"sluggard.github.io","root":"/blog/","images":"/blog/images","scheme":"Pisces","version":"8.1.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="分享从java入门到放弃的整个过程">
-<meta property="og:type" content="website">
+<meta name="description" content="Idea 踩坑 当运行debug时，Error running ‘xxxxx.xx’: Command line is too long. Shorten command line for xxxxx.xx or also for JUnit default configuration?">
+<meta property="og:type" content="article">
 <meta property="og:title" content="懒汉">
-<meta property="og:url" content="https://sluggard.github.io/categories/Redis/index.html">
+<meta property="og:url" content="https://sluggard.github.io/2021/01/06/Idea%20%E8%B8%A9%E5%9D%91/index.html">
 <meta property="og:site_name" content="懒汉">
-<meta property="og:description" content="分享从java入门到放弃的整个过程">
+<meta property="og:description" content="Idea 踩坑 当运行debug时，Error running ‘xxxxx.xx’: Command line is too long. Shorten command line for xxxxx.xx or also for JUnit default configuration?">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-06T01:35:34.992Z">
+<meta property="article:modified_time" content="2021-01-06T01:35:41.776Z">
 <meta property="article:author" content="懒汉">
 <meta property="article:tag" content="个人博客,java,技术">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://sluggard.github.io/categories/Redis/">
+<link rel="canonical" href="https://sluggard.github.io/2021/01/06/Idea%20%E8%B8%A9%E5%9D%91/">
 
 
 <script class="page-configurations">
@@ -44,11 +46,11 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
-<title>分类: Redis | 懒汉</title>
+<title> | 懒汉</title>
   
 
 
@@ -174,7 +176,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -187,6 +189,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Idea-%E8%B8%A9%E5%9D%91"><span class="nav-number">1.</span> <span class="nav-text">Idea 踩坑</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -252,51 +255,116 @@
 </noscript>
 
 
-    <div class="main-inner category posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
-  
-  
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <h2 class="collection-header">Redis
-          <small>分类</small>
-        </h2>
-      </div>
 
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://sluggard.github.io/2021/01/06/Idea%20%E8%B8%A9%E5%9D%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="懒汉">
+      <meta itemprop="description" content="分享从java入门到放弃的整个过程">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="懒汉">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
       
-    <div class="collection-year">
-      <span class="collection-header">2020</span>
+
+      <time title="创建时间：2021-01-06 09:35:34 / 修改时间：09:35:41" itemprop="dateCreated datePublished" datetime="2021-01-06T09:35:34+08:00">2021-01-06</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Idea-踩坑"><a href="#Idea-踩坑" class="headerlink" title="Idea 踩坑"></a>Idea 踩坑</h1><blockquote>
+<p>当运行debug时，Error running ‘xxxxx.xx’: Command line is too long. Shorten command line for xxxxx.xx or also for JUnit default configuration?</p>
+</blockquote>
+<p>在workspace.xml中</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">component</span> <span class="attr">name</span>=<span class="string">&quot;PropertiesComponent&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 添加一行配置即可 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;dynamic.classpath&quot;</span> <span class="attr">value</span>=<span class="string">&quot;true&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">component</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-12-29T19:35:28+08:00"
-              content="2020-12-29">
-          12-29
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/blog/2020/12/29/Redis%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url">
-            <span itemprop="name">Redis底层实现数据结构</span>
-          </a>
-      </div>
+    <footer class="post-footer">
+          
 
-      
-    </header>
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>懒汉
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://sluggard.github.io/2021/01/06/Idea%20%E8%B8%A9%E5%9D%91/" title="">https://sluggard.github.io/2021/01/06/Idea 踩坑/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/2020/12/30/BuildBlog/" rel="prev" title="博客搭建">
+                  <i class="fa fa-chevron-left"></i> 博客搭建
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
+</div>
 
-    </div>
-  </div>
-  
-  
-  
 
+
+
+
+
+    <div class="comments gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -382,11 +450,30 @@
       quicklink.listen({
         timeout : 3000,
         priority: true,
-        ignores : [uri => uri.includes('#'),uri => uri === 'https://sluggard.github.io/categories/Redis/',]
+        ignores : [uri => uri.includes('#'),uri => uri === 'https://sluggard.github.io/2021/01/06/Idea%20%E8%B8%A9%E5%9D%91/',]
       });
       });
   </script>
 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.css">
+
+<script>
+NexT.utils.loadComments('.gitalk-container', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '014c40097650689bde94',
+      clientSecret: 'e6d917a412878b64963ca5865bd1c7c9c5df3b19',
+      repo        : 'blog',
+      owner       : 'Sluggard',
+      admin       : ['Sluggard'],
+      id          : '98640f0272ec92178fc278ed6dad2748',
+        language: 'zh-CN',
+      distractionFreeMode: false
+    });
+    gitalk.render(document.querySelector('.gitalk-container'));
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>
