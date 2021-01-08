@@ -336,16 +336,4 @@ queue：
         <tag>数据库</tag>
       </tags>
   </entry>
-  <entry>
-    <title></title>
-    <url>/blog/2021/01/06/Idea%20%E8%B8%A9%E5%9D%91/</url>
-    <content><![CDATA[<h1 id="Idea-踩坑"><a href="#Idea-踩坑" class="headerlink" title="Idea 踩坑"></a>Idea 踩坑</h1><blockquote>
-<p>当运行debug时，Error running ‘xxxxx.xx’: Command line is too long. Shorten command line for xxxxx.xx or also for JUnit default configuration?</p>
-</blockquote>
-<p>在workspace.xml中</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">component</span> <span class="attr">name</span>=<span class="string">&quot;PropertiesComponent&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 添加一行配置即可 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;dynamic.classpath&quot;</span> <span class="attr">value</span>=<span class="string">&quot;true&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">component</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-]]></content>
-  </entry>
 </search>
